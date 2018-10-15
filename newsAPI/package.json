@@ -1,0 +1,17 @@
+{
+  "name": "node-news-api",
+  "version": "0.0.1",
+  "description": "Fetching the latest news",
+  "main": "server.js",
+  "author": "Johnny",
+  "dependencies": {
+    "@google-cloud/language": "^2.0.0",
+    "express": "latest",
+    "mongodb": "^3.1.8",
+    "newsapi": "^2.4.0",
+    "request": "latest"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  }
+}

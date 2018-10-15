@@ -1,0 +1,14 @@
+{
+  "name": "realtimeshares",
+  "version": "1.0.0",
+  "description": "Get realtime share data from Alpha Vantage",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Johnny",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^5.5.3"
+  }
+}

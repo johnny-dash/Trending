@@ -1,0 +1,15 @@
+{
+  "name": "node-web-scrape",
+  "version": "0.0.1",
+  "description": "fetch the information from url tank.",
+  "main": "server.js",
+  "author": "Johnny",
+  "dependencies": {
+    "cheerio": "latest",
+    "express": "latest",
+    "request": "latest"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  }
+}
