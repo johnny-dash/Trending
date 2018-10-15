@@ -2,9 +2,14 @@
   "name": "node-news-api",
   "version": "0.0.1",
   "description": "Fetching the latest news",
-  "main": "server.js",
+  "main": "dist/server.js",
   "author": "Johnny",
+  "scripts": {
+    "build": "./node_modules/.bin/babel src --out-dir dist",
+    "start": "npm run build && node dist/server.js"
+  },
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
     "@google-cloud/language": "^2.0.0",
     "express": "latest",
     "mongodb": "^3.1.8",
@@ -12,6 +17,9 @@
     "request": "latest"
   },
   "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
     "nodemon": "^1.18.4"
   }
 }
