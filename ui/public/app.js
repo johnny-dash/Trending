@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Form from "./components/form";
-import apiCall from "./services/apiCall";
+import Dashboard from "./components/Dashboard";
+
 
 ReactDOM.render(
-  <Form {...apiCall} />,
-  document.getElementById("fromComponent")
+  <Dashboard />,
+  document.getElementById("root")
 );

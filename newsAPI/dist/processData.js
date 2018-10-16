@@ -22,13 +22,13 @@ async function processData(keys, from, to, db) {
               source = _articles$i.source,
               description = _articles$i.description,
               title = _articles$i.title,
-              publishAt = _articles$i.publishAt,
+              publishedAt = _articles$i.publishedAt,
               url = _articles$i.url;
         const sentiment = await (0, _getSentiment.getSentiment)(description);
         const article = {
           description,
           title,
-          publishAt,
+          publishedAt,
           url,
           source: source.name,
           sentiment

@@ -9,13 +9,12 @@ export async function processData(keys, from, to, db) {
     if(results.totalResults > 0) {
       const articles = results.articles;
       for(let i =0; i < articles.length; i++){
-
-        const { source, description, title, publishAt, url } = articles[i];
+        const { source, description, title, publishedAt, url } = articles[i];
         const sentiment = await getSentiment(description);
         const article = {
           description,
           title,
-          publishAt,
+          publishedAt,
           url,
           source: source.name,
           sentiment

@@ -19,7 +19,7 @@ async function queryNews(queryKey, from, to) {
     to: to,
     language: config.en,
     sortBy: 'relevancy',
-    page: 2
+    page: 3
   });
   return result;
 }

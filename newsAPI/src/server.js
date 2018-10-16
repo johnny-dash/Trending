@@ -1,43 +1,64 @@
+const express = require('express');
+const app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
-const config = require('../api-config');
+io.on('connection', (client) => {
+  setInterval(() => {
+    client.emit('timer', {
+        time: new Date(),
+        value: 0.5 - Math.random()
+    });
+  }, 5000)
+})
 
-const MongoClient = require('mongodb').MongoClient;
-const url = 'mongodb://localhost:27017';
-const dbName = 'localhost';
+app.get('/news', function(req, res){
+  res.sendFile(__dirname + '/index.html');
+});
 
-const language = require('@google-cloud/language');
-const client = new language.LanguageServiceClient();
-import { processData } from './processData';
 
-async function main() {
-  try {
-    // connect to local mongo database
-    const client = await MongoClient.connect(url);
-    const db = client.db(dbName)
+http.listen(3000, function(){
+  console.log('listening on *:3000');
+});
 
-    // execute immediately
-    await executeTask(db);
-    setInterval(async () => {
-      await executeTask(db);
-    }, 1000 * 60 * 60);
-  } catch(error) {
-    console.log(error);
-  }
-}
 
-async function executeTask(db) {
-  const to = new Date();
-  const from = new Date();
-  from.setDate(to.getDate() - 1);
+// const config = require('../api-config');
 
-  const backGroundKey = config.backgroundKey;
-  await processData(backGroundKey, from, to, db);
+// const MongoClient = require('mongodb').MongoClient;
+// const url = 'mongodb://localhost:27017';
+// const dbName = 'localhost';
 
-  const specificKey = config.specificKey;
-  await processData(specificKey, from, to, db);
-}
+// import { processData } from './processData';
 
-main();
+// async function main() {
+//   try {
+//     // connect to local mongo database
+//     const client = await MongoClient.connect(url);
+//     const db = client.db(dbName)
+
+//     // execute immediately
+//     await executeTask(db);
+//     setInterval(async () => {
+//       await executeTask(db);
+//     }, 1000 * 60 * 60);
+//   } catch(error) {
+//     console.log(error);
+//   }
+// }
+
+// async function executeTask(db) {
+//   const to = new Date();
+//   const from = new Date();
+//   from.setDate(to.getDate() - 1);
+
+//   const backGroundKey = config.backgroundKey;
+//   await processData(backGroundKey, from, to, db);
+
+//   const specificKey = config.specificKey;
+//   await processData(specificKey, from, to, db);
+// }
+
+// main();
 
 // To query /v2/top-headlines
 // All options passed to topHeadlines are optional, but you need to include at least one of them
