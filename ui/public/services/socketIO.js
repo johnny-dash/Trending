@@ -1,13 +1,24 @@
 import openSocket from 'socket.io-client';
-
-const socket = openSocket('http://localhost:3000');
-
+let socket = {};
 
 function subscribeToNews(callback) {
+    socket = openSocket('http://localhost:3000');
     socket.on('timer', (data) => {
         console.log(data);
         callback(data);
     });
 }
 
-export { subscribeToNews };
+function subscribeToTwitter(callback) {
+    socket = openSocket('http://localhost:3000');
+    socket.on('twitter', (data) => {
+        console.log(data);
+        callback(data);
+    });
+}
+
+function closeSocket() {
+    socket.close();
+}
+
+export { subscribeToNews, closeSocket, subscribeToTwitter };

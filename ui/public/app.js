@@ -1,9 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import Dashboard from "./components/Dashboard";
-
+import { BrowserRouter as Router} from 'react-router-dom'
+import { Routes } from './components/routes';
 
 ReactDOM.render(
-  <Dashboard />,
+  <Router>
+    <Routes />
+  </Router>,
   document.getElementById("root")
 );

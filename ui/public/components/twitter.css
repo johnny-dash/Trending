@@ -1,0 +1,16 @@
+.twitter-list {
+    max-height: 400px;
+    overflow: auto;
+}
+
+.positive {
+    background-color: greenyellow;
+}
+
+.negative {
+    background-color: red;
+}
+
+.natural {
+    background-color: aqua;
+}

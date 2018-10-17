@@ -2,15 +2,55 @@ const express = require('express');
 const app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+import { getSentiment } from './google/getSentiment';
+// var cfg = require('../api-config');
+const config = {
+  consumer_key: 'hRolA824CQSrMtMYMnWfYAN7D',
+  consumer_secret: '866SCQr19JIn1DuKXKQZgne263vJ1EZXIhIw9AOMb6oMBbHTWw',
+  token: '2118841-GxOE9wlt7E6QiFMtqssoYaVJgYk07EJtOap6yhw8Uo',
+  token_secret: 'uoXA8bQuZon0GGstS4OKngFfEYOv2UHPZCjOqJ3wYY6b6'
+}
+var tw = require('node-tweet-stream')(config);
 
-io.on('connection', (client) => {
-  setInterval(() => {
-    client.emit('timer', {
-        time: new Date(),
-        value: 0.5 - Math.random()
-    });
-  }, 5000)
+tw.track('finance');
+tw.track('economy');
+
+tw.on('tweet', async function (tweet) {
+  if(preProcessTweet(tweet)){
+    const tweetContent = {
+      text: tweet.text,
+      created_at: tweet.created_at,
+      sentiment: await getSentiment(tweet.text),
+      user: {
+        name: tweet.user.name,
+        location: tweet.user.location,
+        profile_image: tweet.user.profile_image_url,
+        profile_banner_url: tweet.user.profile_banner_url
+      }
+    }
+    io.emit('twitter', tweetContent);
+  }
 })
+
+tw.on('error', function (err) {
+  console.log('Oh no')
+})
+
+
+function preProcessTweet(tweet) {
+  return tweet.text.length > 10 && tweet.lang === 'en';
+}
+
+
+
+// io.on('connection', (client) => {
+//   setInterval(() => {
+//     client.emit('timer', {
+//         time: new Date(),
+//         value: 0.5 - Math.random()
+//     });
+//   }, 5000)
+// })
 
 app.get('/news', function(req, res){
   res.sendFile(__dirname + '/index.html');

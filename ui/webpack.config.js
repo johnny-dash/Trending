@@ -7,6 +7,7 @@ module.exports = {
     path: path.resolve(__dirname, "public/dist"),
     filename: "bundle.js"
   },
+  mode: 'development',
   module: {
     rules: [
       {
@@ -23,6 +24,10 @@ module.exports = {
             loader: "html-loader"
           }
         ]
+      },
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
       }
     ]
   },
