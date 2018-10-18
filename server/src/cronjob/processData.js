@@ -1,5 +1,5 @@
-import { getSentiment } from './google/getSentiment';
-import { queryNews } from './newsAPI/fetchNews';
+import { getSentiment } from '../google/getSentiment';
+import { queryNews } from '../newsAPI/fetchNews';
 
 export async function processNews(keys, from, to, db) {
   for(let key of keys) {
@@ -19,6 +19,7 @@ export async function processNews(keys, from, to, db) {
           source: source.name,
           sentiment
         }
+        console.log(article);
         buffer.push(article);
       }
       await db.collection(key).insertMany(buffer);

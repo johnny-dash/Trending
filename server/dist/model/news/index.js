@@ -9,9 +9,15 @@ exports.getNewsSentiment = getNewsSentiment;
 require("core-js/modules/web.dom.iterable");
 
 async function getNews(db) {
-  const financeNews = await db.collection('finance').find({}).toArray();
-  const businessNews = await db.collection('business').find({}).toArray();
-  const marketNews = await db.collection('market').find({}).toArray();
+  const financeNews = await db.collection('finance').find({}).sort({
+    publishedAt: -1
+  }).toArray();
+  const businessNews = await db.collection('business').find({}).sort({
+    publishedAt: -1
+  }).toArray();
+  const marketNews = await db.collection('market').find({}).sort({
+    publishedAt: -1
+  }).toArray();
   return {
     financeNews,
     businessNews,

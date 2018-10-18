@@ -5,8 +5,6 @@ var cors = require('cors');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-const config = require('../api-config');
-
 const MongoClient = require('mongodb').MongoClient;
 const url = 'mongodb://localhost:27017';
 const dbName = 'localhost';
@@ -14,7 +12,7 @@ const dbName = 'localhost';
 
 import { getNews, getNewsSentiment} from './model/news/index';
 import { twitterTrackKeyWord } from './twitter/index';
-import { processNews } from './processData';
+import { cronJob } from './cronjob/index';
 
 app.use(bodyParser.urlencoded({
   extended: true
@@ -58,30 +56,17 @@ async function main() {
     const client = await MongoClient.connect(url);
     const db = client.db(dbName)
 
+    // start cron job
+    cronJob(db);
+
     // start twitter stream
     await twitterTrackKeyWord(['finance', 'economy'], io, db);
 
-    // fetch news
-    await executeTask(db);
-    setInterval(async () => {
-      await executeTask(db);
-    }, 1000 * 60 * 60);
 
   } catch(error) {
     console.log(error);
   }
 }
 
-async function executeTask(db) {
-  const to = new Date();
-  const from = new Date();
-  from.setDate(to.getDate() - 1);
 
-  const backGroundKey = config.backgroundKey;
-  await processNews(backGroundKey, from, to, db);
-
-  const specificKey = config.specificKey;
-  await processNews(specificKey, from, to, db);
-}
-
-// main();
+main();

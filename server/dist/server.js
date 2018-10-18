@@ -4,7 +4,7 @@ var _index = require("./model/news/index");
 
 var _index2 = require("./twitter/index");
 
-var _processData = require("./processData");
+var _index3 = require("./cronjob/index");
 
 const express = require('express');
 
@@ -17,8 +17,6 @@ var cors = require('cors');
 var http = require('http').Server(app);
 
 var io = require('socket.io')(http);
-
-const config = require('../api-config');
 
 const MongoClient = require('mongodb').MongoClient;
 
@@ -53,25 +51,13 @@ async function main() {
   try {
     // connect to local mongo database
     const client = await MongoClient.connect(url);
-    const db = client.db(dbName); // start twitter stream
+    const db = client.db(dbName); // start cron job
 
-    await (0, _index2.twitterTrackKeyWord)(['finance', 'economy'], io, db); // fetch news
-
-    await executeTask(db);
-    setInterval(async () => {
-      await executeTask(db);
-    }, 1000 * 60 * 60);
+    (0, _index3.cronJob)(db); // start twitter stream
+    // await twitterTrackKeyWord(['finance', 'economy'], io, db);
   } catch (error) {
     console.log(error);
   }
 }
 
-async function executeTask(db) {
-  const to = new Date();
-  const from = new Date();
-  from.setDate(to.getDate() - 1);
-  const backGroundKey = config.backgroundKey;
-  await (0, _processData.processNews)(backGroundKey, from, to, db);
-  const specificKey = config.specificKey;
-  await (0, _processData.processNews)(specificKey, from, to, db);
-} // main();
+main();
