@@ -8,12 +8,16 @@ class News extends Component {
         super(props);
 
         this.state = {
-          news: [],
+          news: {},
           pieChartFinance: {},
           pieChartEconomic: {},
           pieChartBusiness: {},
-          newsNumber: 0
+          newsNumber: 0,
+          currentNews: [],
+          currentNewsKey: 'financeNews'
         };
+
+        this.selectOnChange = this.selectOnChange.bind(this);
     }
 
 
@@ -71,9 +75,10 @@ class News extends Component {
         fetch('http://localhost:3001/news')
         .then(res => {
             res.json().then(resNews => {
-                console.log(resNews.financeNews);
+                const currentNewsKey = _this.state.currentNewsKey;
                 _this.setState({
-                    news: resNews.financeNews
+                    news: resNews,
+                    currentNews: resNews[currentNewsKey]
                 })
             })
         })
@@ -82,8 +87,14 @@ class News extends Component {
         });
     }
 
-    handleSelect(evt) {
-        console.log(evtKey);
+    selectOnChange(event) {
+        const news = this.state.news;
+        const value = event.target.value;
+
+        this.setState({
+            currentNews: news[value],
+            currentNewsKey: value
+        })
     }
 
     render() {
@@ -118,23 +129,14 @@ class News extends Component {
                     </div>
                 </div>
                 <h2>News log</h2>
-                <ButtonToolbar>
-                <DropdownButton
-                    bsStyle='primary'
-                    title='Select a Key word'
-                    id="source-dropdown"
-                    onSelect={function(evt) {
-                        console.log(evt);
-                    }}
-                    >
-                        <MenuItem eventKey="financeNews" active>Finance</MenuItem>
-                        <MenuItem eventKey="marketNews">Market</MenuItem>
-                        <MenuItem eventKey="businessNews">Business</MenuItem>
-                </DropdownButton>
-                </ButtonToolbar>
+                <select onChange={this.selectOnChange} value={this.state.currentNewsKey}>
+                    <option value='financeNews'>Finance</option>
+                    <option value='marketNews'>Market</option>
+                    <option value='businessNews'>Business</option>
+                </select>
                 <div className='row'>
                     <ul className='list-group list'>
-                    {this.state.news.map((item, index) => {
+                    {this.state.currentNews.map((item, index) => {
                             return <li className="list-group-item" key={index}>
                                 <div className='row'>
                                     <div className='col-1'>
