@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-
+import './dashboard.css';
 
 class Dashboard extends Component {
     constructor(props) {
@@ -10,7 +10,14 @@ class Dashboard extends Component {
     render() {
         return (
             <div>
-                Dont do this
+                <h1 className='center'>Financial Sentiment Analysis</h1>
+                <br />
+                <div className='center'>
+                    <span className='very-big' >A platform to make money easily </span><span className='very-small'>someday.</span>
+                </div>
+                <div className='center'>
+                    <img src="https://media.giphy.com/media/VTxmwaCEwSlZm/200.gif"></img>
+                </div>
             </div>
 
         )

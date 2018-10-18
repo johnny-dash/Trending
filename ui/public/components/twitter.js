@@ -29,7 +29,7 @@ class Twitter extends Component {
 
             ref.state.lineChart.data.labels.push(data.created_at.split(' ')[3]);
             ref.state.lineChart.data.datasets[0].data.push(data.sentiment);
-            console.log(tweetNumber);
+
             if (tweetNumber > 20) {
                 ref.state.lineChart.data.labels.shift();
                 ref.state.lineChart.data.datasets[0].data.shift();

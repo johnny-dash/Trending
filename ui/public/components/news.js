@@ -1,120 +1,158 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import { subscribeToNews, closeSocket } from "../services/socketIO";
+import { DropdownButton, MenuItem, ButtonToolbar } from 'react-bootstrap';
 import Chart from 'chart.js';
-
+import './news.css';
 class News extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
           news: [],
-          lineChart: {},
+          pieChartFinance: {},
+          pieChartEconomic: {},
+          pieChartBusiness: {},
           newsNumber: 0
         };
-
-        subscribeToNews((data) => {
-            this.state.newsNumber ++;
-            // update status
-            const news = this.state.news;
-            news.push(data);
-            this.setState({
-                news
-            })
-
-            this.state.lineChart.data.labels.push(data.time);
-            this.state.lineChart.data.datasets[0].data.push(data.value);
-
-            if (this.state.newsNumber > 5) {
-                this.state.lineChart.data.labels.shift();
-                this.state.lineChart.data.datasets[0].data.shift();
-            }
-
-            this.state.lineChart.update();
-        });
     }
 
-
-    renderNewsList() {
-        const news = [];
-        this.state.news.forEach(item => {
-            // console.log(item);
-            news.push(<li class="list-group-item"> 123 </li>);
-        })
-        return news;
-    }
 
     componentDidMount() {
-        let lineChartCanvas = this.refs.lineChart;
-        const lineData = {
-            labels: [],
-            datasets: [
-                {
-                    label: "Overall Sentiment",
-                    backgroundColor: 'rgba(0, 0, 0, 0)',
-                    borderColor: 'rgba(0,255,0,0.5)',
-                    data: []
-                },
-                {
-                    label: "Finance",
-                    backgroundColor: 'rgba(0, 0, 0, 0)',
-                    borderColor: 'rgba(255,0,0,0.5)',
-                    data: []
-                },
-                {
-                    label: "Economic",
-                    backgroundColor: 'rgba(0, 0, 0, 0)',
-                    borderColor: 'rgba(255,255,0,0.5)',
-                    data: []
-                }
-            ]
-        };
+        const _this = this;
+        fetch('http://localhost:3001/newsSentiment')
+        .then(res => {
+            res.json().then(value => {
 
-        let myLineChart = new Chart(lineChartCanvas, {
-          type: 'line',
-          data: lineData
+                let financePieChartCanvas = _this.refs.financePieChart;
+                let businessPieChartCanvas = _this.refs.businessPieChart;
+                let marketPieChartCanvas = _this.refs.marketPieChart;
+
+                let financePieChart = new Chart(financePieChartCanvas, {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            data: value.finance,
+                            backgroundColor: ['rgba(123, 196, 78,1)', 'rgba(0, 162, 231, 1)', 'rgba(255, 63, 105, 1)']
+                        }],
+                        labels: ["Positive", "Natural", "Negative"]
+                    }
+                  });
+
+                let businessPieChart = new Chart(businessPieChartCanvas, {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            data: value.business,
+                            backgroundColor: ['rgba(123, 196, 78,1)', 'rgba(0, 162, 231, 1)', 'rgba(255, 63, 105, 1)']
+                        }],
+                        labels: ["Positive", "Natural", "Negative"]
+                    }
+                });
+
+                let marketPieChart = new Chart(marketPieChartCanvas, {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            data: value.market,
+                            backgroundColor: ['rgba(123, 196, 78,1)', 'rgba(0, 162, 231, 1)', 'rgba(255, 63, 105, 1)']
+                        }],
+                        labels: ["Positive", "Natural", "Negative"]
+                    }
+                });
+                _this.setState({pieChartBusiness: businessPieChart});
+                _this.setState({pieChartEconomic: marketPieChart});
+                _this.setState({pieChartFinance: financePieChart});
+            })
+        })
+        .catch(err => {
+            console.log(err);
         });
 
-        this.setState({lineChart: myLineChart});
-
-        const pieData = {
-            datasets: [{
-                data: [10,20,30]
-            }],
-            labels: ["January", "February", "March"]
-        }
-
-        let pieChartCanvas = this.refs.pieChart;
-        let myPieChart = new Chart(pieChartCanvas, {
-            type: 'pie',
-            data: pieData,
-            options: {
-                segmentShowStroke : true,
-                segmentStrokeColor : "#fff",
-            }
-          });
-        this.setState({pieChart: myPieChart});
+        fetch('http://localhost:3001/news')
+        .then(res => {
+            res.json().then(resNews => {
+                console.log(resNews.financeNews);
+                _this.setState({
+                    news: resNews.financeNews
+                })
+            })
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
 
-    componentWillUnmount() {
-        closeSocket();
+    handleSelect(evt) {
+        console.log(evtKey);
     }
 
     render() {
+        const now = new Date().toDateString();
         return (
-            <div>
-                <div className='row'>
-                    <div className='col-10'>
-                        <canvas ref={'lineChart'} height={'50'} width={'200'}></canvas>
+            <div className="container">
+                <h3>News sentiment by {now}</h3>
+                <div className='row gutter'>
+                    <div className='card col-4'>
+                        <div className='card-title'>
+                            <h5>Finance</h5>
+                        </div>
+                        <div className='card-body'>
+                            <canvas ref={'financePieChart'}></canvas>
+                        </div>
                     </div>
-                    <div className='col-2'>
-                        <canvas ref={'pieChart'} height={'30'} width={'30'}></canvas>
+                    <div className='card col-4'>
+                        <div className='card-title'>
+                            <h5>Market</h5>
+                        </div>
+                        <div className='card-body'>
+                            <canvas ref={'marketPieChart'}></canvas>
+                        </div>
+                    </div>
+                    <div className='card col-4'>
+                        <div className='card-title'>
+                            <h5>Business</h5>
+                        </div>
+                        <div className='card-body'>
+                            <canvas ref={'businessPieChart'}></canvas>
+                        </div>
                     </div>
                 </div>
                 <h2>News log</h2>
+                <ButtonToolbar>
+                <DropdownButton
+                    bsStyle='primary'
+                    title='Select a Key word'
+                    id="source-dropdown"
+                    onSelect={function(evt) {
+                        console.log(evt);
+                    }}
+                    >
+                        <MenuItem eventKey="financeNews" active>Finance</MenuItem>
+                        <MenuItem eventKey="marketNews">Market</MenuItem>
+                        <MenuItem eventKey="businessNews">Business</MenuItem>
+                </DropdownButton>
+                </ButtonToolbar>
                 <div className='row'>
                     <ul className='list-group list'>
-                        { this.renderNewsList() }
+                    {this.state.news.map((item, index) => {
+                            return <li className="list-group-item" key={index}>
+                                <div className='row'>
+                                    <div className='col-1'>
+                                        <span>{item.source}</span>
+                                    </div>
+                                    <div className='col-8'>
+                                        <span>{item.description}</span>
+                                    </div>
+                                    <div className='col-1'>
+                                        <span>{item.publishedAt.split('T')[0]}</span>
+                                    </div>
+                                    <div className={"col-1 " + (item.sentiment > 0 ? "positive" : (item.sentiment == 0 ? "natural" : "negative")) }>
+                                        <span>{item.sentiment}</span>
+                                    </div>
+                                </div>
+
+                            </li>;
+                        })}
                     </ul>
                 </div>
             </div>

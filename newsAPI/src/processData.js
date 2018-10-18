@@ -1,7 +1,7 @@
 import { getSentiment } from './google/getSentiment';
 import { queryNews } from './newsAPI/fetchNews';
 
-export async function processData(keys, from, to, db) {
+export async function processNews(keys, from, to, db) {
   for(let key of keys) {
     let buffer = [];
     const results = await queryNews(key, from, to);

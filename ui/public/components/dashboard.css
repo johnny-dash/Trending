@@ -1,0 +1,15 @@
+.center {
+    display: flex;
+    padding-top: 40px;
+    align-items: center;
+    justify-content: center;
+}
+
+.very-small {
+    padding-top: 30px;
+    font-size: 8px;
+}
+
+.very-big {
+    font-size: 40px;
+}

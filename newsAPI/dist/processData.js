@@ -3,13 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.processData = processData;
+exports.processNews = processNews;
 
 var _getSentiment = require("./google/getSentiment");
 
 var _fetchNews = require("./newsAPI/fetchNews");
 
-async function processData(keys, from, to, db) {
+async function processNews(keys, from, to, db) {
   for (let key of keys) {
     let buffer = [];
     const results = await (0, _fetchNews.queryNews)(key, from, to);
