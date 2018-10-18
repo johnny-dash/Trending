@@ -102,6 +102,7 @@ class News extends Component {
         return (
             <div className="container">
                 <h3>News sentiment by {now}</h3>
+                <h5>The following charts are the sentiment proportion of three key work 'finance', 'market', 'business' from the news source.</h5>
                 <div className='row gutter'>
                     <div className='card col-4'>
                         <div className='card-title'>
@@ -128,7 +129,8 @@ class News extends Component {
                         </div>
                     </div>
                 </div>
-                <h2>News log</h2>
+                <h3>News log</h3>
+                <h5>Select the news source to check the detail information and corresponding sentiment index</h5>
                 <select onChange={this.selectOnChange} value={this.state.currentNewsKey}>
                     <option value='financeNews'>Finance</option>
                     <option value='marketNews'>Market</option>

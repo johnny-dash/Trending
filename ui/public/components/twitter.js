@@ -70,6 +70,7 @@ class Twitter extends Component {
                 <h2>Twitter Stream</h2>
                 <hr />
                 <h3>Sentiment chart</h3>
+                <h5>The following time series line chart displays the real-time sentiment change of keyword 'Finance', 'Market', 'Business' from Twitter.</h5>
                 <div className='row'>
                     <div className='col-12'>
                             <canvas ref={'lineChart'} height={'50'} width={'200'}></canvas>
@@ -77,6 +78,7 @@ class Twitter extends Component {
                 </div>
                 <hr />
                 <h3>Stream log</h3>
+                <h5>Check the tweet details here and corresponding sentiment index.</h5>
                 <div className="row">
                     <ul className="col-12 list-group twitter-list">
                         {this.state.tweets.map((tweet, index) => {

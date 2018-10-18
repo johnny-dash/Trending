@@ -54,7 +54,8 @@ async function main() {
     const db = client.db(dbName); // start cron job
 
     (0, _index3.cronJob)(db); // start twitter stream
-    // await twitterTrackKeyWord(['finance', 'economy'], io, db);
+
+    await (0, _index2.twitterTrackKeyWord)(['finance', 'economy'], io, db);
   } catch (error) {
     console.log(error);
   }
