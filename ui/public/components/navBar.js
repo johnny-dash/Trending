@@ -32,7 +32,7 @@ class NavBar extends Component {
                         <Link className="nav-link" to="/twitter">Twitter Stream</Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link disabled-link" to="/dis">Share Stream</Link>
+                        <Link className="nav-link disabled-link" to="/dis">Stock Market Stream</Link>
                     </li>
                     </ul>
 
