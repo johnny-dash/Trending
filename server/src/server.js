@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const path = require('path');
 var cors = require('cors');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -14,12 +15,27 @@ import { getNews, getNewsSentiment} from './model/news/index';
 import { twitterTrackKeyWord } from './twitter/index';
 import { cronJob } from './cronjob/index';
 
+const staticAssetsPath = path.resolve(__dirname, '../../ui/public/dist');
+
 app.use(bodyParser.urlencoded({
   extended: true
 }))
 
 app.use(bodyParser.json())
 app.use(cors())
+
+
+app.use(
+  express.static(staticAssetsPath, {
+      // https://jakearchibald.com/2016/caching-best-practices/
+      maxAge: 31536000,
+      setHeaders(response, path, stat) {
+          if (path.includes('service-worker.js') || path.includes('index.html')) {
+              response.set('Cache-Control', 'no-cache');
+          }
+      }
+  })
+);
 
 app.get('/news', async function (req, res) {
   // This is very very ugly
@@ -39,8 +55,15 @@ app.get('/newsSentiment', async function(req, res) {
   res.send(sentiment);
 })
 
-app.listen(3001, () => {
-  console.log('listening on *:3000');
+app.get('*', (request, response) => {
+  response
+      .status(200)
+      .type('html')
+      .sendFile(path.join(staticAssetsPath, 'index.html'));
+});
+
+app.listen(8080, () => {
+  console.log('listening on *:8080');
 })
 
 
@@ -69,4 +92,4 @@ async function main() {
 }
 
 
-main();
+// main();

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import { DropdownButton, MenuItem, ButtonToolbar } from 'react-bootstrap';
 import Chart from 'chart.js';
 import './news.css';
 class News extends Component {
@@ -23,7 +22,7 @@ class News extends Component {
 
     componentDidMount() {
         const _this = this;
-        fetch('http://localhost:3001/newsSentiment')
+        fetch('http://localhost:8080/newsSentiment')
         .then(res => {
             res.json().then(value => {
 
@@ -72,7 +71,7 @@ class News extends Component {
             console.log(err);
         });
 
-        fetch('http://localhost:3001/news')
+        fetch('http://localhost:8080/news')
         .then(res => {
             res.json().then(resNews => {
                 const currentNewsKey = _this.state.currentNewsKey;

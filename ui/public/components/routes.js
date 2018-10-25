@@ -1,4 +1,4 @@
-import React from 'React';
+import React from 'react';
 import { Redirect, Switch, Route } from 'react-router-dom';
 import DashBoard from './dashboard';
 import News from './news';
